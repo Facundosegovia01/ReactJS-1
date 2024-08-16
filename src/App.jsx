@@ -1,8 +1,8 @@
 import * as React from "react"
 import { useState } from "react";
 import Navbar from "./components/Navbar/Navbar"
+import { Button, ChakraProvider, Text, Flex, } from "@chakra-ui/react"
 import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
-import { Button, ChakraProvider, Text, Flex} from "@chakra-ui/react"
 function App() {
 
   const [count, setCount] = useState (1);
@@ -19,15 +19,19 @@ const agregarItem = () =>{
 };
   return (
     <ChakraProvider>
+
 <Navbar/>
-<Flex>
+
+
+
+
+<ItemListContainer greeting={"Ecommerce"}/> 
+
+<Flex justify={"center"} alignItems={"center"} gap={"4"} marginTop={"10"}>
 <Button onClick={sacarItem}>-</Button>
 <Text>{count}</Text>
 <Button onClick={agregarItem}>+</Button>
 </Flex>
-
-<ItemListContainer>
-</ItemListContainer>
     </ChakraProvider>
  
   )

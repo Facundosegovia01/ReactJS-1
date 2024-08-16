@@ -1,11 +1,12 @@
-const ItemListContainer = (props) => {
-    console.log(props);
+import {
+  Box
+} from "@chakra-ui/react";
+
+const ItemListContainer = ({greeting}) => {
     return (
-      <div>
-        <h1>{props.label}</h1>
-        <p>Items: </p>
-      </div>
-    );
+     <Box textAlign={"center"} marginTop={10}>{greeting}</Box>
+   
+     );
   };
   
   export default ItemListContainer;
