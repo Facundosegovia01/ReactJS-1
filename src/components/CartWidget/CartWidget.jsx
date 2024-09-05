@@ -6,7 +6,7 @@ import {
   
   
   
-  const CartWidget = () => {
+export const CartWidget = () => {
       return (
        <Flex alignItems={"center"} height={"100%"} justifyContent={"center"} width={10}>
        <FaCartPlus size={30}/>
@@ -17,4 +17,3 @@ import {
       );
     };
     
-    export default CartWidget;
