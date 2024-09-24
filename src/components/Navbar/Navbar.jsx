@@ -12,51 +12,73 @@ import {
   Stack,
   useColorMode,
   Center,
+  Text,
+  HStack,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { CartWidget } from "../CartWidget";
 import { Link } from "react-router-dom";
-import { createProductsFirestore } from "../../helpers";
+import { useItemsCollection } from "../../hooks";
 
-export const Navbar = () => {
+export const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-
-  const menuOptions = [
-    { id: 1, label: "Tablets", link: "/products/category/tablets" },
-    { id: 2, label: "Perfumes", link: "/products/category/fragrances" },
-    { id: 3, label: "Laptops", link: "/products/category/laptops" },
-    { id: 4, label: "Tablets", link: "/products/category/tablets" },
-  ];
+  const { items } = useItemsCollection("categories");
 
   return (
-    <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+    <Box bg={useColorModeValue("gray.100", "gray.900")} px={4} boxShadow="md">
       <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+        {/* Logo */}
         <Box>
-          <Link to="/">STORE</Link>
+          <Link to="/">
+            <Text
+              fontSize="xl"
+              fontWeight="bold"
+              color={useColorModeValue("blue.600", "white")}
+            >
+              Store react
+            </Text>
+          </Link>
         </Box>
 
-        <Flex alignItems={"center"} flex={1} justifyContent={"center"}>
+        {/* Categorías */}
+        <HStack spacing={8}>
           <Menu>
-            <MenuButton as={Button} cursor="pointer">
-              Menu
+            <MenuButton
+              as={Button}
+              fontWeight="bold"
+              bg={useColorModeValue("gray.100", "gray.700")}
+              _hover={{ bg: useColorModeValue("gray.200", "gray.600") }}
+            >
+              Categorías
             </MenuButton>
-            <MenuList>
-              {menuOptions.map((option) => (
-                <MenuItem key={option.id} as={Link} to={option.link}>
-                  {option.label}
+            <MenuList
+              maxH="200px"
+              overflowY="auto"
+              bg={useColorModeValue("white", "gray.800")}
+            >
+              {items.map((category) => (
+                <MenuItem key={category.slug}>
+                  <Link to={`/category/${category.slug}`}>{category.name}</Link>
                 </MenuItem>
               ))}
             </MenuList>
           </Menu>
+        </HStack>
 
-        </Flex>
-
+        {/* Carrito y usuario */}
         <Flex alignItems={"center"}>
           <Stack direction={"row"} spacing={7}>
+            {/* Icono del carrito */}
             <CartWidget />
-            <Button onClick={toggleColorMode}>
+
+            <Button
+              onClick={toggleColorMode}
+              bg={useColorModeValue("gray.100", "gray.700")}
+              _hover={{ bg: useColorModeValue("gray.200", "gray.600") }}
+            >
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
+
           </Stack>
         </Flex>
       </Flex>

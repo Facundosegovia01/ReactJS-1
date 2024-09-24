@@ -1,29 +1,26 @@
-import { useState, useEffect } from "react";
-import { getProductByCategory } from "../services/products"; 
+import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 export const useProductsByCategory = (id) => {
-  const [productData, setProductsData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    getProductByCategory(id)
-      .then((res) => {
-        if (res.status === 200 && res.data.products) {
-          setProductsData(res.data.products);
-        } else {
-          console.log("Error");
-          setProductsData([]); // Asegurarse de que siempre devuelva un array
-        }
+  React.useEffect(() => {
+    const customQuery = query(
+      collection(db, "products"),
+      where("category", "==", id)
+    );
+
+    getDocs(customQuery)
+      .then((snapshot) => {
+        setProducts(
+          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        );
       })
-      .catch((err) => {
-        console.log(err);
-        setProductsData([]); // Manejar el error devolviendo un array vacío
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  return { productData, loading };
+  return { products, loading };
 };
